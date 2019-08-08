@@ -19,6 +19,7 @@ import matplotlib.pyplot as plt
 from datetime import datetime as dt
 from image import load_image
 from camera_model import CameraModel
+import cv2
 
 parser = argparse.ArgumentParser(description='Play back images from a given directory')
 
@@ -57,8 +58,6 @@ for line in timestamps_file:
     current_chunk = chunk
 
     img = load_image(filename, model)
-    plt.imshow(img)
-    plt.xlabel(datetime)
-    plt.xticks([])
-    plt.yticks([])
-    plt.pause(0.01)
+    cv2.imshow('image', img)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break

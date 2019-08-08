@@ -13,8 +13,11 @@
 ###############################################################################
 
 import re
-from PIL import Image
-from colour_demosaicing import demosaicing_CFA_Bayer_bilinear as demosaic
+import cv2
+# from PIL import Image
+# from colour_demosaicing import demosaicing_CFA_Bayer_bilinear as demosaic
+# from colour_demosaicing import demosaicing_CFA_Bayer_Malvar2004 as demosaic
+# from colour_demosaicing import demosaicing_CFA_Bayer_Menon2007 as demosaic
 
 BAYER_STEREO = 'gbrg'
 BAYER_MONO = 'rggb'
@@ -40,10 +43,11 @@ def load_image(image_path, model=None):
     else:
         pattern = BAYER_MONO
 
-    img = Image.open(image_path)
-    img = demosaic(img, pattern)
+    # img = Image.open(image_path)
+    # img = demosaic(img, pattern)
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE | cv2.IMREAD_ANYDEPTH)
+    img = cv2.cvtColor(img, cv2.COLOR_BAYER_GB2BGR)[:,:,::-1]
     if model:
         img = model.undistort(img)
 
     return img
-
